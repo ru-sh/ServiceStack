@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24606.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A6434098-FA39-4EBF-837D-607A6D7E7CC3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B52C3168-D09E-4227-BB3F-DD5A39FC2B09}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceStack.Interfaces.CoreClrUnofficial", "src\ServiceStack.Interfaces\ServiceStack.Interfaces.CoreClrUnofficial.xproj", "{8E6B6708-4D5A-4838-82C9-CEB2309BB2ED}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceStack.Common.CoreClrUnofficial", "src\ServiceStack.Common\ServiceStack.Common.CoreClrUnofficial.xproj", "{747E2D2F-7C8A-4E3F-98A8-90A2150728A6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E6B6708-4D5A-4838-82C9-CEB2309BB2ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E6B6708-4D5A-4838-82C9-CEB2309BB2ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E6B6708-4D5A-4838-82C9-CEB2309BB2ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E6B6708-4D5A-4838-82C9-CEB2309BB2ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{747E2D2F-7C8A-4E3F-98A8-90A2150728A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{747E2D2F-7C8A-4E3F-98A8-90A2150728A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{747E2D2F-7C8A-4E3F-98A8-90A2150728A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{747E2D2F-7C8A-4E3F-98A8-90A2150728A6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8E6B6708-4D5A-4838-82C9-CEB2309BB2ED} = {A6434098-FA39-4EBF-837D-607A6D7E7CC3}
+		{747E2D2F-7C8A-4E3F-98A8-90A2150728A6} = {A6434098-FA39-4EBF-837D-607A6D7E7CC3}
+	EndGlobalSection
+EndGlobal

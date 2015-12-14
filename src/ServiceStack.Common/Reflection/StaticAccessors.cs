@@ -11,8 +11,14 @@ namespace ServiceStack.Reflection
         /// </summary>
         public static Func<TEntity, TId> TypedGetPropertyFn<TId>(PropertyInfo pi)
         {
+#if NETFX_CORE
+            var mi = pi.GetMethod;
+            return (Func<TEntity, TId>)mi.CreateDelegate(typeof(Func<TEntity, TId>));
+#else
             var mi = pi.GetMethodInfo();
             return (Func<TEntity, TId>)mi.MakeDelegate(typeof(Func<TEntity, TId>));
+#endif
+
         }
 
         /// <summary>
@@ -26,12 +32,18 @@ namespace ServiceStack.Reflection
 
         public static Func<TEntity, object> ValueUnTypedGetPropertyTypeFn(PropertyInfo pi)
         {
+#if NETFX_CORE
+            var mi = typeof(StaticAccessors<TEntity>).GetMethod("TypedGetPropertyFn");
+#else
             var mi = typeof(StaticAccessors<TEntity>).GetMethodInfo("TypedGetPropertyFn");
+#endif
             var genericMi = mi.MakeGenericMethod(pi.PropertyType);
             var typedGetPropertyFn = (Delegate)genericMi.Invoke(null, new[] { pi });
 
-#if IOS || SL5 || NETFX_CORE
+#if IOS || SL5
             return x => typedGetPropertyFn.InvokeMethod(x);
+#elif NETFX_CORE
+            return x => typedGetPropertyFn.DynamicInvoke(x);
 #else
 
             var typedMi = typedGetPropertyFn.Method;
@@ -61,8 +73,13 @@ namespace ServiceStack.Reflection
         /// </summary>
         public static Action<TEntity, TId> TypedSetPropertyFn<TId>(PropertyInfo pi)
         {
+#if NETFX_CORE
+            var mi = pi.SetMethod;
+            return (Action<TEntity, TId>)mi.CreateDelegate(typeof(Action<TEntity, TId>));
+#else
             var mi = pi.SetMethod();
             return (Action<TEntity, TId>)mi.MakeDelegate(typeof(Action<TEntity, TId>));
+#endif
         }
 
         /// <summary>
@@ -76,12 +93,18 @@ namespace ServiceStack.Reflection
 
         public static Action<TEntity, object> ValueUnTypedSetPropertyTypeFn(PropertyInfo pi)
         {
+#if NETFX_CORE
+            var mi = typeof(StaticAccessors<TEntity>).GetMethod("TypedSetPropertyFn");
+#else
             var mi = typeof(StaticAccessors<TEntity>).GetMethodInfo("TypedSetPropertyFn");
+#endif
             var genericMi = mi.MakeGenericMethod(pi.PropertyType);
             var typedSetPropertyFn = (Delegate)genericMi.Invoke(null, new[] { pi });
 
-#if IOS || SL5 || NETFX_CORE
+#if IOS || SL5
             return (x, y) => typedSetPropertyFn.InvokeMethod(x, new[] { y });
+#elif  NETFX_CORE
+            return (x, y) => typedSetPropertyFn.DynamicInvoke(x, new[] { y });
 #else
 
             var typedMi = typedSetPropertyFn.Method;

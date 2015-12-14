@@ -18,5 +18,8 @@ using System.Runtime.Serialization;
 [assembly: AssemblyVersion("4.0.0")]
 [assembly: AssemblyFileVersion("4.0.0.0")]
 
-[assembly: ContractNamespace("http://schemas.servicestack.net/types", 
-	ClrNamespace = "ServiceStack")]
+[assembly: ContractNamespaceAttribute("http://schemas.servicestack.net/types"
+#if !NETFX_CORE
+    , ClrNamespace = "ServiceStack"
+#endif
+    )]

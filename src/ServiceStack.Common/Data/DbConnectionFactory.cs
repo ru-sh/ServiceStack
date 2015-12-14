@@ -2,6 +2,10 @@
 using System;
 using System.Data;
 
+#if NETFX_CORE
+using IDbConnection = System.Data.Common.DbConnection;
+#endif
+
 namespace ServiceStack.Data
 {
     public class DbConnectionFactory : IDbConnectionFactory

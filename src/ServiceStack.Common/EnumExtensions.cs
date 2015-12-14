@@ -48,7 +48,12 @@ namespace ServiceStack
 
         public static TypeCode GetTypeCode(this Enum @enum)
         {
+#if NETFX_CORE
+            var ut = Enum.GetUnderlyingType(@enum.GetType());
+            return ReflectionExtensions.GetTypeCode(ut);
+#else
             return Type.GetTypeCode(Enum.GetUnderlyingType(@enum.GetType()));
+#endif
         }
 
         public static bool Has<T>(this Enum @enum, T value)

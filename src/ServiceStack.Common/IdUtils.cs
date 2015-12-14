@@ -15,17 +15,23 @@ namespace ServiceStack
         {
 
 #if !SL5 && !IOS && !XBOX
+#if NETFX_CORE
+            var hasIdInterfaces = typeof(T).FindInterfaces(
+                (t, critera) => t.IsGenericType() && t.GetGenericTypeDefinition() == typeof(IHasId<>), null);
+#else
             var hasIdInterfaces = typeof(T).FindInterfaces(
                 (t, critera) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IHasId<>), null);
-
-            if (hasIdInterfaces.Length > 0)
+#endif
+            if (hasIdInterfaces.Any())
             {
                 CanGetId = HasId<T>.GetId;
                 return;
             }
 #endif
+            var ti = typeof(T).GetTypeInfo();
+            var isClassOrInterface = ti.IsClass || ti.IsInterface;
 
-            if (typeof(T).IsClass() || typeof(T).IsInterface)
+            if (isClassOrInterface)
             {
                 foreach (var pi in typeof(T).GetPublicProperties()
                     .Where(pi => pi.AllAttributes<Attribute>()
@@ -92,8 +98,13 @@ namespace ServiceStack
 #if IOS || SL5
             GetIdFn = HasPropertyId<TEntity>.GetId;
 #else
+#if NETFX_CORE
             var hasIdInterfaces = typeof(TEntity).FindInterfaces(
+                (t, critera) => t.IsGenericType() && t.GetGenericTypeDefinition() == typeof(IHasId<>), null).ToList();
+#else
+            var hasIdInterfaces = typeof(TEntity).GetTypeInfo().FindInterfaces(
                 (t, critera) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IHasId<>), null);
+#endif
 
             var genericArg = hasIdInterfaces[0].GetGenericArguments()[0];
             var genericType = typeof(HasIdGetter<,>).MakeGenericType(typeof(TEntity), genericArg);

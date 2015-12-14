@@ -4,10 +4,6 @@ using System.Threading;
 using ServiceStack.Commands;
 using ServiceStack.Support;
 
-#if NETFX_CORE
-using Windows.System.Threading;
-#endif
-
 namespace ServiceStack
 {
     public class CommandsUtils
@@ -27,12 +23,8 @@ namespace ServiceStack
                 var waitHandle = new AutoResetEvent(false);
                 waitHandles.Add(waitHandle);
                 var commandResultsHandler = new CommandResultsHandler<T>(results, command, waitHandle);
-
-#if NETFX_CORE
-                ThreadPool.RunAsync(new WorkItemHandler((IAsyncAction) => ExecuteCommandList(commandResultsHandler)));
-#else
                 ThreadPool.QueueUserWorkItem(ExecuteCommandList, commandResultsHandler);
-#endif
+
             }
             WaitAll(waitHandles.ToArray(), timeout);
             return results;
@@ -44,7 +36,7 @@ namespace ServiceStack
             // throws an exception if there are no wait handles
             if (waitHandles != null && waitHandles.Length > 0)
             {
-#if !SL5 && !IOS && !XBOX
+#if !SL5 && !IOS && !XBOX && !NETFX_CORE
                 if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
                 {
                     // WaitAll for multiple handles on an STA thread is not supported.
@@ -86,11 +78,7 @@ namespace ServiceStack
         {
             foreach (ICommandExec command in commands)
             {
-#if NETFX_CORE
-                ThreadPool.RunAsync(new WorkItemHandler((IAsyncAction) => ExecuteCommandExec(command)));
-#else
                 ThreadPool.QueueUserWorkItem(ExecuteCommandExec, command);
-#endif
             }
         }
 
@@ -107,11 +95,7 @@ namespace ServiceStack
                 var waitHandle = new AutoResetEvent(false);
                 waitHandles.Add(waitHandle);
                 var commandExecsHandler = new CommandExecsHandler(command, waitHandle);
-#if NETFX_CORE
-                ThreadPool.RunAsync(new WorkItemHandler((IAsyncAction) => ExecuteCommandList(commandExecsHandler)));
-#else
                 ThreadPool.QueueUserWorkItem(ExecuteCommandList, commandExecsHandler);
-#endif
             }
             return waitHandles;
         }

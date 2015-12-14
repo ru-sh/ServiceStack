@@ -4,10 +4,6 @@ using System.Linq;
 using System.Threading;
 using ServiceStack.Support;
 
-#if NETFX_CORE
-using Windows.System.Threading;
-#endif
-
 namespace ServiceStack
 {
     public static class ActionExecExtensions
@@ -32,11 +28,7 @@ namespace ServiceStack
                 var waitHandle = new AutoResetEvent(false);
                 waitHandles.Add(waitHandle);
                 var commandExecsHandler = new ActionExecHandler(action, waitHandle);
-#if NETFX_CORE
-                ThreadPool.RunAsync(new WorkItemHandler((IAsyncAction) => commandExecsHandler.Execute()));
-#else
                 ThreadPool.QueueUserWorkItem(x => ((ActionExecHandler)x).Execute(), commandExecsHandler);
-#endif
             }
             return waitHandles;
         }
@@ -56,7 +48,7 @@ namespace ServiceStack
             return WaitAll(waitHandles.ToArray(), (int)timeout.TotalMilliseconds);
         }
 
-#if !SL5 && !IOS && !XBOX
+#if !SL5 && !IOS && !XBOX && !NETFX_CORE
         public static bool WaitAll(this List<IAsyncResult> asyncResults, TimeSpan timeout)
         {
             var waitHandles = asyncResults.ConvertAll(x => x.AsyncWaitHandle);

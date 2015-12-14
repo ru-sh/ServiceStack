@@ -186,12 +186,21 @@ namespace ServiceStack
                     return match.Value; // ambiguous ampersand
                 }
             }
+
+#if NETFX_CORE
+            return ((char)decimalValue).ToString();
+#else
             return ((char)decimalValue).ToString(CultureInfo.InvariantCulture);
+#endif
         }
 
         public static string ToChar(this int codePoint)
         {
+#if NETFX_CORE
+            return Convert.ToChar(codePoint).ToString();
+#else
             return Convert.ToChar(codePoint).ToString(CultureInfo.InvariantCulture);
+#endif
         }
 
         // http://www.w3.org/TR/html5/entities.json

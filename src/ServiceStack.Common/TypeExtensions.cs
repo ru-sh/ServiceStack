@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace ServiceStack
 {
@@ -16,17 +18,25 @@ namespace ServiceStack
 
         public static void AddReferencedTypes(Type type, HashSet<Type> refTypes)
         {
-            if (type.BaseType != null)
+
+#if !NETFX_CORE
+            var t = type;
+#else
+            var t = type.GetTypeInfo();
+#endif
+
+
+            if (t.BaseType != null)
             {
-                if (!refTypes.Contains(type.BaseType))
+                if (!refTypes.Contains(t.BaseType))
                 {
-                    refTypes.Add(type.BaseType);
-                    AddReferencedTypes(type.BaseType, refTypes);
+                    refTypes.Add(t.BaseType);
+                    AddReferencedTypes(t.BaseType, refTypes);
                 }
 
-                if (!type.BaseType.GetGenericArguments().IsEmpty())
+                if (!t.BaseType.GetGenericArguments().IsEmpty())
                 {
-                    foreach (var arg in type.BaseType.GetGenericArguments())
+                    foreach (var arg in t.BaseType.GetGenericArguments())
                     {
                         if (!refTypes.Contains(arg))
                         {

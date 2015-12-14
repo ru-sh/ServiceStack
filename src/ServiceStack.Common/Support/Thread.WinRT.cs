@@ -1,4 +1,4 @@
-﻿#if NETFX_CORE
+﻿#if _NETFX_CORE
 using System;
 using System.Collections.Generic;
 using System.Linq;

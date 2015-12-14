@@ -4,6 +4,11 @@
 #if !SL5 && !XBOX
 using System.Data;
 
+#if NETFX_CORE
+using IDbConnection = System.Data.Common.DbConnection;
+using IDbCommand = System.Data.Common.DbCommand;
+#endif
+
 namespace ServiceStack.Data
 {
 	public interface IHasDbConnection

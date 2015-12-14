@@ -17,11 +17,13 @@ namespace ServiceStack
                 return apiAttr.Description;
             }
 
+#if !NETFX_CORE
             var componentDescAttr = type.FirstAttribute<System.ComponentModel.DescriptionAttribute>();
             if (componentDescAttr != null)
             {
                 return componentDescAttr.Description;
             }
+#endif
 
             var ssDescAttr = type.FirstAttribute<ServiceStack.DataAnnotations.DescriptionAttribute>();
             if (ssDescAttr != null)
@@ -40,11 +42,13 @@ namespace ServiceStack
                 return apiAttr.Description;
             }
 
+#if !NETFX_CORE
             var componentDescAttr = mi.FirstAttribute<System.ComponentModel.DescriptionAttribute>();
             if (componentDescAttr != null)
             {
                 return componentDescAttr.Description;
             }
+#endif
 
             var ssDescAttr = mi.FirstAttribute<ServiceStack.DataAnnotations.DescriptionAttribute>();
             if (ssDescAttr != null)
@@ -57,11 +61,13 @@ namespace ServiceStack
 
         public static string GetDescription(this ParameterInfo pi)
         {
+#if !NETFX_CORE
             var componentDescAttr = pi.FirstAttribute<System.ComponentModel.DescriptionAttribute>();
             if (componentDescAttr != null)
             {
                 return componentDescAttr.Description;
             }
+#endif
 
             var ssDescAttr = pi.FirstAttribute<ServiceStack.DataAnnotations.DescriptionAttribute>();
             if (ssDescAttr != null)
